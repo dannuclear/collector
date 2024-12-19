@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2021 (x64) (http://www.altova.com) by Victor Rozhkov (BFT-Razrabotka) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://пф.рф/СЗБД/2023-04-03" xmlns:УТ7="http://пф.рф/УТ/2023-04-03" targetNamespace="http://пф.рф/СЗБД/2023-04-03" elementFormDefault="qualified">
+	<xs:import namespace="http://пф.рф/УТ/2023-04-03" schemaLocation="commons/УнифТипы_2023-04-03.xsd"/>
+	<xs:element name="ЭДПФР">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="СЗБД" minOccurs="1" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ИдЗаписиБанкаДанных" type="УТ7:ТипGUID"/>
+							<xs:element name="КодДействия">
+								<xs:annotation>
+									<xs:documentation>Число, значения от 1 до 5: 1 - регистрация, 2 - отмена, 3 - прекращение, 4 - восстановление, 5 - изменение в записи о категории</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:minInclusive value="1"/>
+										<xs:maxInclusive value="5"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:choice>
+								<xs:element name="БлокПрекращенияОтменыВосстановленияЗаписи">
+									<xs:annotation>
+										<xs:documentation>Обязательно для кода действия 2, 3 или 4</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="РеестровыйНомерЗаписиБанкаДанных" type="УТ7:ТипНепустаяСтрока"/>
+											<xs:element name="ИнформацияОФЛ" minOccurs="0" maxOccurs="1">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element ref="УТ7:ФИО"/>
+														<xs:element ref="УТ7:СНИЛС"/>
+														<xs:element ref="УТ7:ДатаРождения"/>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="РешениеОВосстановленииПрекращенииОтменеКатегории">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="Основание">
+															<xs:annotation>
+																<xs:documentation>Для кода действия 2 или 3 (1-Смерть ФЛ; 2-Ошибочная выдача удостоверения (решение суда; решение комиссии; акта органа исполнительной власти субъектов Российской Федерации, выдавшего удостоверения); 3-Присвоение другой категории; 4-Вступление в новый брак; 5-Прекращение совместного проживания; 6-Регистрация записи в другом субъекте; 7-Выезд из зоны; 8-Изменение статуса зоны; 9-Достижение возраста 18 лет; 10-Достижение возраста 23 лет; 11-Достижение возраста 25 лет; 12-Выезд за границу на постоянное место жительства; 13-Количество детей менее 3; 14-Достижение возраста совершеннолетия или окончание учебного заведения; 15-Усыновление; 16-Возвращение ребенка, оставшегося без попечения родителей, его родителям или родителю; 17-Достижение ребенком, оставшимся без попечения родителей, совершеннолетия или приобретение таким ребенком полной дееспособности до достижения им совершеннолетия; 18-Ошибка оператора; 19 - Иные основания)</xs:documentation>
+																<xs:documentation>Для кода действия 4 (1-Ошибочные сведения о смерти; 2-Ошибочные действия оператора; 3-Отмена усыновления)</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:integer">
+																	<xs:minInclusive value="1"/>
+																	<xs:maxInclusive value="19"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+														<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+														<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+														<xs:element name="ДатаРешения" type="xs:date"/>
+														<xs:element name="ОрганПринявшийРешение" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+														<xs:element name="ИНН" type="УТ7:ТипИНН_ЮЛ"/>
+														<xs:element name="КПП" type="УТ7:ТипКПП"/>
+														<xs:element name="НормаПрава" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+														<xs:element name="ДатаОкончанияДействияКатегории" type="xs:date" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Обязательно для кода действия 4</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+														<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>UID файла</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="БлокВключенияЗаписиВБанкДанных">
+									<xs:annotation>
+										<xs:documentation>Обязательно для кода действия 1 или 5</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:choice>
+											<xs:element name="СведенияОВетеранахВОВ">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="ИнформацияОФЛ">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element ref="УТ7:ФИО"/>
+																	<xs:element ref="УТ7:СНИЛС"/>
+																	<xs:element ref="УТ7:ДатаРождения"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="УдостоверениеВетеранаВОВ">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="КодВидаУдостоверения">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="ПризнакДубликата" type="xs:boolean" minOccurs="0"/>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачи" type="xs:date"/>
+																	<xs:element name="ОрганВыдавшийУдостоверение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="РешениеОПрисвоенииКатегорииВетеранаВОВ" minOccurs="1">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Категория" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Код категории банка данных по справочнику ЕСНСИ "Справочник категорий банков данных"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="ДатаНачалаДействия" type="xs:date"/>
+																	<xs:choice>
+																		<xs:element name="ДатаОкончанияДействия" type="xs:date"/>
+																		<xs:element name="ПризнакБессрочно" type="xs:boolean"/>
+																	</xs:choice>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаРешения" type="xs:date"/>
+																	<xs:element name="ОрганПринявшийРешение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="НормаПраваКотораяУстанавливаетКатегорию" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="СведенияОПогибшемУмершемИнвалидеВОВУчастникеВОВ" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Обязательно для категорий членов семей (значение элемента Категория = 7)</xs:documentation>
+															</xs:annotation>
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element ref="УТ7:ФИО"/>
+																	<xs:element ref="УТ7:ДатаРождения"/>
+																	<xs:element ref="УТ7:СНИЛС" minOccurs="0"/>
+																	<xs:element name="ДатаСмерти" type="xs:date"/>
+																	<xs:element name="КодКатегории" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Код категории банка данных по справочнику ЕСНСИ "Справочник категорий банков данных"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="ДатаПрисвоенияКатегории" type="xs:date"/>
+																	<xs:element name="НомерРеестровойЗаписи" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="НомерРешения" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="ДатаРешения" type="xs:date" minOccurs="0"/>
+																	<xs:element name="ОрганВыдавшийРешение" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="ТипРодственнойСвязи" minOccurs="1" maxOccurs="1">
+																		<xs:annotation>
+																			<xs:documentation>1-Мать; 2-Отец; 3-Сын; 4-Дочь; 5-Брат; 6-Сестра; 7-Бабушка; 8-Дедушка; 9-Внук; 10-Внучка; 11-Супруг; 12-Супруга; 13-Отчим; 14-Мачеха; 15-Пасынок; 16-Падчерица; 17-Бывший супруг; 18-Бывшая супруга</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																				<xs:maxInclusive value="18"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ПодтверждающиеДокументыВетеранаВОВ" minOccurs="0" maxOccurs="unbounded">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ВидДокумента" type="xs:integer">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачи" type="xs:date"/>
+																	<xs:element name="ОрганВедомствоОрганизацияВыдавшийДокумент" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ТипЛицаТипУчастникаВОВИинвалидаВОВЧленаСемьиПогибшегоУмершегоИнвалидаВОВУчастникаВОВ" type="xs:integer" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Обязательно для категорий со значением элемента Категория = 2, 4, 6, 7</xs:documentation>
+																<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов участников ВОВ"</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+														<xs:element name="СведенияОбИнвалидностиВетеранаВОВ" minOccurs="0">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ГруппаИнвалидности">
+																		<xs:annotation>
+																			<xs:documentation>1-Первая группа; 2-Вторая группа; 3-Третья группа; 4-Категория «ребенок-инвалид»; 5-Инвалидность не установлена</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																				<xs:maxInclusive value="5"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="ПричинаИнвалидности" type="xs:integer">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Причина инвалидности"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="ДатаУстановления" type="xs:date"/>
+																	<xs:choice>
+																		<xs:element name="ДатаИстеченияСрокаПризнанияЛицаИнвалидом" type="xs:date"/>
+																		<xs:element name="ПризнакБессрочно" type="xs:boolean"/>
+																	</xs:choice>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="СведенияОНаградахВетеранаВОВ" minOccurs="0" maxOccurs="unbounded">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="НаименованиеНаграды" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачи" type="xs:date"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="КемВыдано" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ОснованиеВыдачиУдостоверенияКНаграде" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="СведенияОВетеранахТруда">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="ИнформацияОФЛ" minOccurs="0">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element ref="УТ7:ФИО"/>
+																	<xs:element ref="УТ7:СНИЛС"/>
+																	<xs:element ref="УТ7:ДатаРождения"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="УдостоверениеВетеранаТруда">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="КодВидаУдостоверения">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="ПризнакДубликата" type="xs:boolean" minOccurs="0"/>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="1"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачи" type="xs:date"/>
+																	<xs:element name="ОрганВыдавшийУдостоверение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="СведенияОНагражденииВетеранаТруда" minOccurs="0" maxOccurs="unbounded">
+															<xs:annotation>
+																<xs:documentation>Обязательно для категорий с (значение в элементе Категория) = 8</xs:documentation>
+															</xs:annotation>
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="НазваниеНаграды" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачи" type="xs:date"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="КемВыдано" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ОснованиеВыдачи" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="РешениеОПрисвоенииКатегорииВетеранаТруда">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Категория" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Код категории банка данных по справочнику ЕСНСИ "Справочник категорий банков данных"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="СубъектРФ" type="УТ7:ТипНепустаяСтрока" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>Обязательно для категорий (значение в элементе Категория) = 11</xs:documentation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "ССРФ"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="ДатаНачалаДействия" type="xs:date"/>
+																	<xs:choice>
+																		<xs:element name="ДатаОкончанияДействия" type="xs:date"/>
+																		<xs:element name="ПризнакБессрочно" type="xs:boolean"/>
+																	</xs:choice>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаРешения" type="xs:date"/>
+																	<xs:element name="ОрганПринявшийРешение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="НормаПрава" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ТрудовойСтаж" minOccurs="1">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ДатаНачалаРаботыВГодыВОВ" type="xs:date" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>Обязательно для категорий с (значение в элементе Категория) = 9</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="КоличествоЛет" type="xs:integer" minOccurs="1"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ПодтверждающиеДокументыВетеранаТруда" minOccurs="0" maxOccurs="unbounded">
+															<xs:annotation>
+																<xs:documentation>Обязательно для категорий с (значение в элементе Категория) = 9</xs:documentation>
+															</xs:annotation>
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ВидДокумента">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачиДокумента" type="xs:date"/>
+																	<xs:element name="ОрганВедомствоОрганизацияВыдавшийДокумент" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="СведенияОпострадавшихВРезультатеРадиационныхИлиТехногенныхКатастроф">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="ИнформацияОФЛ">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element ref="УТ7:ФИО"/>
+																	<xs:element ref="УТ7:СНИЛС"/>
+																	<xs:element ref="УТ7:ДатаРождения"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="УдостоверениеПострадавших" minOccurs="0">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="КодВидаУдостоверения">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачи" type="xs:date"/>
+																	<xs:element name="ОрганВыдавшийУдостоверение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="РешениеОПрисвоенииКатегорииПострадавших">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Категория" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Код категории банка данных по справочнику ЕСНСИ "Справочник категорий банков данных"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="ДатаНачалаДействия" type="xs:date"/>
+																	<xs:choice>
+																		<xs:element name="ДатаОкончанияДействия" type="xs:date"/>
+																		<xs:element name="ПризнакБессрочно" type="xs:boolean"/>
+																	</xs:choice>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаРешения" type="xs:date"/>
+																	<xs:element name="ОрганПринявшийРешение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="НормаПрава" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="СведенияОПогибшемКормильце" minOccurs="0">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Фамилия" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Имя" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Отчество" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:choice>
+																		<xs:element name="СНИЛС" type="xs:integer"/>
+																		<xs:element name="ПогибшийБезСНИЛС" type="xs:boolean"/>
+																	</xs:choice>
+																	<xs:element name="ДатаРождения" type="xs:date"/>
+																	<xs:element name="ДатаСмерти" type="xs:date"/>
+																	<xs:element name="КодКатегорииКормильца" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Код категории банка данных по справочнику ЕСНСИ "Справочник категорий банков данных"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="ДатаПрисвоенияКатегории" type="xs:date"/>
+																	<xs:element name="НомерРеестровойЗаписи" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="НомерРешения" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="ДатаРешения" type="xs:date" minOccurs="0"/>
+																	<xs:element name="ОрганВыдавшийРешение" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="ТипРодственнойСвязи">
+																		<xs:annotation>
+																			<xs:documentation>1-Мать; 2-Отец; 3-Сын; 4-Дочь; 5-Брат; 6-Сестра; 7-Бабушка; 8-Дедушка; 9-Внук; 10-Внучка; 11-Супруг; 12-Супруга; 13-Отчим; 14-Мачеха; 15-Пасынок; 16-Падчерица; 17-Бывший супруг; 18-Бывшая супруга</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																				<xs:maxInclusive value="18"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="ПризнакСмертиВследствиеРадиации" type="xs:boolean" minOccurs="0"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ПодтверждающиеДокументыПострадавших" minOccurs="0" maxOccurs="unbounded">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ВидДокумента">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачиДокумента" type="xs:date"/>
+																	<xs:element name="ОрганВедомствоОрганизацияВыдавшийДокумент" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="СведенияОбИнвалидностиПострадавших" minOccurs="0">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ГруппаИнвалидности">
+																		<xs:annotation>
+																			<xs:documentation>1-Первая группа; 2-Вторая группа; 3-Третья группа; 4-Категория «ребенок-инвалид»; 5-Инвалидность не установлена</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																				<xs:maxInclusive value="5"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:choice>
+																		<xs:element name="ПричинаИнвалидности">
+																			<xs:annotation>
+																				<xs:documentation>Код по справочнику ЕСНСИ "Причина инвалидности"</xs:documentation>
+																			</xs:annotation>
+																			<xs:simpleType>
+																				<xs:restriction base="xs:integer">
+																					<xs:minInclusive value="1"/>
+																				</xs:restriction>
+																			</xs:simpleType>
+																		</xs:element>
+																		<xs:element name="УточняющаяПричина">
+																			<xs:annotation>
+																				<xs:documentation>Код по справочнику ЕСНСИ "Справочник уточняющих причин инвалидности"</xs:documentation>
+																			</xs:annotation>
+																			<xs:simpleType>
+																				<xs:restriction base="xs:integer">
+																					<xs:minInclusive value="1"/>
+																				</xs:restriction>
+																			</xs:simpleType>
+																		</xs:element>
+																	</xs:choice>
+																	<xs:element name="ДатаУстановленияИнвалидности" type="xs:date"/>
+																	<xs:choice>
+																		<xs:element name="ДатаИстеченияСрокаПризнанияЛицаИнвалидом" type="xs:date"/>
+																		<xs:element name="ПризнакБессрочно" type="xs:boolean"/>
+																	</xs:choice>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ПризнакНаличияЛучевойБолезни" type="xs:boolean"/>
+														<xs:element name="СведенияОДозеОблучения" minOccurs="0">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Доза" type="xs:decimal"/>
+																	<xs:element name="ЕденицаИзмерения" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Допустимые значения:  322 (для сЗв) или 321 (для мЗв)</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ГодУчастияВЛиквидацииПоследствий" minOccurs="0">
+															<xs:simpleType>
+																<xs:restriction base="xs:integer">
+																	<xs:minInclusive value="1949"/>
+																	<xs:maxInclusive value="2200"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+														<xs:element name="НаселенныйПунктПолученияРадиации" minOccurs="0">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Страна" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Субъект" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="НаселенныйПункт" type="УТ7:ТипНепустаяСтрока"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ПериодПроживанияВРадиоактивнойЗоне" minOccurs="0" maxOccurs="unbounded">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ДатаНачалаПроживанияВЗоне" type="xs:date"/>
+																	<xs:element name="ДатаОкончанияПроживанияВЗоне" type="xs:date"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ПериодРаботыВРадиоактивнойЗоне" type="УТ7:ТипВременнойПериод" minOccurs="0" maxOccurs="unbounded"/>
+														<xs:element name="ПериодПрохожденияВоеннойСлужбыВРадиоактивнойЗоне" type="УТ7:ТипВременнойПериод" minOccurs="0" maxOccurs="unbounded"/>
+														<xs:element name="ДатаЭвакуацииПереселения" type="xs:date" minOccurs="0"/>
+														<xs:element name="ТипЗоны" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>1-Зона отчуждения; 2-Зона отселения; 3-Зона проживания с правом на отселение; 4-Зона проживания с льготным социально-экономическим статусом</xs:documentation>
+															</xs:annotation>
+															<xs:complexType>
+																<xs:choice>
+																	<xs:element name="ТипЗоныПроживания">
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																				<xs:maxInclusive value="4"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="ТипЗоныРаботы">
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																				<xs:maxInclusive value="4"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="ТипЗоныПрохожденияВоеннойСлужбы">
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																				<xs:maxInclusive value="4"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																</xs:choice>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ПризнакНетрудоспособности" type="xs:boolean" minOccurs="0"/>
+														<xs:element name="ПризнакНахожденияНаИждивенииУУмершегоКормильцаДоМоментаЕгоСмерти" type="xs:boolean" minOccurs="0"/>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="СведенияОДетяхСиротах">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="ИнформацияОФЛ">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element ref="УТ7:ФИО"/>
+																	<xs:element ref="УТ7:СНИЛС"/>
+																	<xs:element ref="УТ7:ДатаРождения"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="РешениеОПрисвоенииКатегорииДетиСироты">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Категория" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Код категории банка данных по справочнику ЕСНСИ "Справочник категорий банков данных"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="ДатаНачалаДействия" type="xs:date"/>
+																	<xs:element name="ДатаОкончанияДействия" type="xs:date"/>
+																	<xs:element name="СубъектРФ" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "ССРФ"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаРешения" type="xs:date"/>
+																	<xs:element name="ОрганПринявшийРешение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="НормаПраваКотораяУстанавливаетКатегорию" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ПодтверждающиеДокументыДетиСироты" minOccurs="0" maxOccurs="unbounded">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ВидДокумента">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="ДатаВыдачиДокумента" type="xs:date"/>
+																	<xs:element name="ОрганВедомствоОрганизацияВыдавшийДокумент" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="СведенияОбОбучении" minOccurs="0" maxOccurs="unbounded">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Период" type="УТ7:ТипВременнойПериод"/>
+																	<xs:element name="ОбучающаяОрганизация" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ВидОбразования">
+																		<xs:annotation>
+																			<xs:documentation>1-Дошкольное; 2-Начальное; 3-Среднее; 4-Высшее; 5-Бакалавриат; 6-Специалитет; 7-Среднее профессиональное; 8-Профессиональная подготовка; 9-Обучение на подготовительных отделениях образовательных организаций высшего образования; 10-Второе среднее профессиональное образование; 11-Основное общее образование; 12-Высшее образование - магистратура; 13-Высшее образование - подготовка кадров высшей квалификации; 14-Дополнительное профессиональное образование</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																				<xs:maxInclusive value="14"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ФормаУстройства" minOccurs="1">
+															<xs:annotation>
+																<xs:documentation>1-Передача на воспитание в семью (усыновление (удочерение)); 2-Передача под опеку (в приемную семью, патронатное воспитание); 3-Устройство в учреждения для детей-сирот или детей, оставшихся без родителей</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:integer">
+																	<xs:minInclusive value="1"/>
+																	<xs:maxInclusive value="3"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="СведенияОНесовершеннолетнихУзниках">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="ИнформацияОФЛ">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element ref="УТ7:ФИО"/>
+																	<xs:element ref="УТ7:СНИЛС"/>
+																	<xs:element ref="УТ7:ДатаРождения"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="УдостоверениеНесовершеннолетниеУзники">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ВидДокумента">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачи" type="xs:date"/>
+																	<xs:element name="Дубликат" type="xs:boolean" minOccurs="0"/>
+																	<xs:element name="ОрганВыдавшийУдостоверение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="РешениеОПрисвоенииКатегорииНесовершеннолетниеУзники">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Категория" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Код категории банка данных по справочнику ЕСНСИ "Справочник категорий банков данных"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="ДатаНачалаДействия" type="xs:date"/>
+																	<xs:choice>
+																		<xs:element name="ДатаОкончанияДействия" type="xs:date"/>
+																		<xs:element name="ПризнакБессрочно" type="xs:boolean"/>
+																	</xs:choice>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаРешения" type="xs:date"/>
+																	<xs:element name="ОрганПринявшийРешение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="НормаПраваКотораяУстанавливаетКатегорию" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ПодтверждающиеДокументыНесовершеннолетниеУзники" minOccurs="0" maxOccurs="unbounded">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Вид">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачиДокумента" type="xs:date"/>
+																	<xs:element name="ОрганВедомствоОрганизацияВыдавшийДокумент" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="СведенияОбИнвалидностиНесовершеннолетниеУзники" minOccurs="0">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ПричинаИнвалидности">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Причина инвалидности"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="ДатаУстановленияИнвалидности" type="xs:date"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="СведенияОМногодетныхСемьях">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="СоставСемьи" minOccurs="1" maxOccurs="unbounded">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ИнформацияОФЛ">
+																		<xs:complexType>
+																			<xs:sequence>
+																				<xs:element ref="УТ7:ФИО"/>
+																				<xs:element ref="УТ7:СНИЛС"/>
+																				<xs:element ref="УТ7:ДатаРождения"/>
+																				<xs:element name="ЯвляетсяОсновнымЛьготополучателем" type="xs:boolean">
+																					<xs:annotation>
+																						<xs:documentation>Обязательно заполнен значением true у одного (и только одного) ФЛ в составе блока СоставСемьи</xs:documentation>
+																					</xs:annotation>
+																				</xs:element>
+																			</xs:sequence>
+																		</xs:complexType>
+																	</xs:element>
+																	<xs:element name="ДатаНачалаДействияКатегории" type="xs:date"/>
+																	<xs:element name="ДатаОкончанияДействияКатегории" type="xs:date"/>
+																	<xs:element name="СведенияОбОчномОбразовании" minOccurs="0" maxOccurs="unbounded">
+																		<xs:complexType>
+																			<xs:sequence>
+																				<xs:element name="Период" type="УТ7:ТипВременнойПериод"/>
+																				<xs:element name="ОбучающаяОрганизация" type="УТ7:ТипНепустаяСтрока"/>
+																			</xs:sequence>
+																		</xs:complexType>
+																	</xs:element>
+																	<xs:element name="СведенияОВоеннойСлужбе" minOccurs="0" maxOccurs="unbounded">
+																		<xs:complexType>
+																			<xs:sequence>
+																				<xs:element name="Период" type="УТ7:ТипВременнойПериод"/>
+																				<xs:element name="ВоеннаяОрганизация" type="УТ7:ТипНепустаяСтрока"/>
+																			</xs:sequence>
+																		</xs:complexType>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ПодтверждающиеДокументыМногодетныеСемьи" minOccurs="0" maxOccurs="unbounded">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Вид">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаДокумента" type="xs:date"/>
+																	<xs:element name="ОрганВедомствоОрганизацияВыдавшийДокумент" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="УдостоверениеМногодетныеСемьи" minOccurs="0">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="ВидУдостоверения">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "Справочник типов документов"</xs:documentation>
+																		</xs:annotation>
+																		<xs:simpleType>
+																			<xs:restriction base="xs:integer">
+																				<xs:minInclusive value="1"/>
+																			</xs:restriction>
+																		</xs:simpleType>
+																	</xs:element>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаВыдачи" type="xs:date"/>
+																	<xs:element name="ОрганВыдавшийУдостоверение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="РешениеОПрисвоенииКатегорииМногодетныеСемьи">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="Категория" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Код категории банка данных по справочнику ЕСНСИ "Справочник категорий банков данных"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="СубъектРФ" type="УТ7:ТипНепустаяСтрока">
+																		<xs:annotation>
+																			<xs:documentation>Код по справочнику ЕСНСИ "ССРФ"</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																	<xs:element name="ДатаНачалаДействия" type="xs:date"/>
+																	<xs:element name="ДатаОкончанияДействия" type="xs:date"/>
+																	<xs:element name="Серия" type="УТ7:ТипНепустаяСтрока" minOccurs="0"/>
+																	<xs:element name="Номер" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ДатаРешения" type="xs:date"/>
+																	<xs:element name="ОрганПринявшийРешение" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="ИНН" type="УТ7:ТипИНН_ЮЛ"/>
+																	<xs:element name="КПП" type="УТ7:ТипКПП"/>
+																	<xs:element name="НормаПраваКотораяУстанавливаетКатегорию" type="УТ7:ТипНепустаяСтрока"/>
+																	<xs:element name="Вложение" type="УТ7:ТипGUID" minOccurs="0">
+																		<xs:annotation>
+																			<xs:documentation>UID файла</xs:documentation>
+																		</xs:annotation>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+										</xs:choice>
+									</xs:complexType>
+								</xs:element>
+							</xs:choice>
+							<xs:element name="СведенияОСотруднике" type="УТ7:ТипДолжностноеЛицо" minOccurs="1" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
