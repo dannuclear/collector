@@ -1,6 +1,10 @@
 package ru.bisoft.collector.batch;
 
+import javax.sql.DataSource;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +14,10 @@ public class Config {
     // private final JobBuilderFactory jobBuilderFactory;
     // private final StepBuilderFactory stepBuilderFactory;
 
+    @Bean
+    JdbcTemplate jdbcTemplate (DataSource db1DataSource) {
+        return new JdbcTemplate(db1DataSource);
+    }
     // @Bean
     // public Job exampleJob() {
     //     return jobBuilderFactory.get("exampleJob")
