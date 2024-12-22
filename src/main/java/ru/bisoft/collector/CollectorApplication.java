@@ -28,19 +28,26 @@ public class CollectorApplication {
 			JobInstanceAlreadyCompleteException, JobParametersInvalidException {
 		ApplicationContext context = SpringApplication.run(CollectorApplication.class, args);
 		JobLauncher launcher = context.getBean(JobLauncher.class);
-		Job job = context.getBean(Job.class);
+		Job job = context.getBean("job", Job.class);
+		Job exportToXmlJob = context.getBean("exportToXmlJob", Job.class);
 
 		JobParameters parameters = new JobParametersBuilder()
 				.addLong("id", 1L)
-				.addString("url", "jdbc:postgresql://192.168.23.227:5432/batch_test_may_delete")
+				// .addString("url", "jdbc:postgresql://192.168.23.227:5432/batch_test_may_delete")
+				.addString("url", "jdbc:postgresql://bi-soft.ru:25432/kchrr")
 				.toJobParameters();
 		launcher.run(job, parameters);
 
 		parameters = new JobParametersBuilder()
-				.addLong("id", 2L)
-				.addString("url", "jdbc:postgresql://192.168.23.227:5432/batch_test_may_delete")
+				.addLong("id", 100L)
 				.toJobParameters();
-		launcher.run(job, parameters);
+		launcher.run(exportToXmlJob, parameters);
+
+		// parameters = new JobParametersBuilder()
+		// 		.addLong("id", 2L)
+		// 		.addString("url", "jdbc:postgresql://bi-soft.ru:25432/kchrr")
+		// 		.toJobParameters();
+		// launcher.run(job, parameters);
 	}
 
 	@Bean
