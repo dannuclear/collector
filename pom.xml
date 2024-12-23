@@ -84,7 +84,7 @@
 							<sources>
 								<source>
 									src/main/resources/smev/szbd/1.0.0/commons/УнифТипы_2023-04-03.xsd</source>
-								<source>src/main/resources/smev/szbd/1.0.0/СЗБД_2023-04-03.xsd</source>
+								<source>src/main/resources/smev/szbd/1.0.0/SINGLE_2023-04-03.xsd</source>
 							</sources>
 						</configuration>
 					</execution>

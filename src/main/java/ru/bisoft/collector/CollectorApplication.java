@@ -1,5 +1,8 @@
 package ru.bisoft.collector;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
@@ -19,7 +22,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
-import ru.pfr.szbd_1_0_0.ЭДПФР;
+import jakarta.xml.bind.Marshaller;
+import ru.pfr.szbd_1_0_0.СЗБД;
 
 @SpringBootApplication
 public class CollectorApplication {
@@ -29,24 +33,32 @@ public class CollectorApplication {
 		ApplicationContext context = SpringApplication.run(CollectorApplication.class, args);
 		JobLauncher launcher = context.getBean(JobLauncher.class);
 		Job job = context.getBean("job", Job.class);
-		Job exportToXmlJob = context.getBean("exportToXmlJob", Job.class);
+		// Job exportToXmlJob = context.getBean("exportToXmlJob", Job.class);
 
 		JobParameters parameters = new JobParametersBuilder()
 				.addLong("id", 1L)
-				// .addString("url", "jdbc:postgresql://192.168.23.227:5432/batch_test_may_delete")
-				.addString("url", "jdbc:postgresql://bi-soft.ru:25432/kchrr")
+				.addString("url", "jdbc:postgresql://192.168.23.227:5432/kchrr")
+				// .addString("url", "jdbc:postgresql://bi-soft.ru:25432/kchrr")
 				.toJobParameters();
 		launcher.run(job, parameters);
 
 		parameters = new JobParametersBuilder()
-				.addLong("id", 100L)
-				.toJobParameters();
-		launcher.run(exportToXmlJob, parameters);
+		.addLong("id", 2L)
+		.addString("url", "jdbc:postgresql://192.168.23.227:5432/kchrr")
+		// .addString("url", "jdbc:postgresql://bi-soft.ru:25432/kchrr")
+		.toJobParameters();
+
+		launcher.run(job, parameters);
 
 		// parameters = new JobParametersBuilder()
-		// 		.addLong("id", 2L)
-		// 		.addString("url", "jdbc:postgresql://bi-soft.ru:25432/kchrr")
-		// 		.toJobParameters();
+		// .addLong("id", 100L)
+		// .toJobParameters();
+		// launcher.run(exportToXmlJob, parameters);
+
+		// parameters = new JobParametersBuilder()
+		// .addLong("id", 2L)
+		// .addString("url", "jdbc:postgresql://bi-soft.ru:25432/kchrr")
+		// .toJobParameters();
 		// launcher.run(job, parameters);
 	}
 
@@ -59,8 +71,12 @@ public class CollectorApplication {
 
 	@Bean
 	Jaxb2Marshaller jaxb2Marshaller() {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
 		Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-		jaxb2Marshaller.setClassesToBeBound(ЭДПФР.СЗБД.class);
+		jaxb2Marshaller.setClassesToBeBound(СЗБД.class);
+		//jaxb2Marshaller.setMarshallerProperties(props);
 		return jaxb2Marshaller;
 	}
 
