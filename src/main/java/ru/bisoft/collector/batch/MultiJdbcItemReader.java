@@ -9,9 +9,12 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.lang.Nullable;
 
 import lombok.NoArgsConstructor;
+import ru.bisoft.collector.domain.SZBDData;
 
 @NoArgsConstructor
 public class MultiJdbcItemReader<T> implements ItemReader<T> {
@@ -38,8 +41,17 @@ public class MultiJdbcItemReader<T> implements ItemReader<T> {
         // resource to 0 and open the first delegate.
         if (currentResource == -1) {
             currentResource = 0;
+
+            if (delegate == null) {
+                delegate = (JdbcCursorItemReader<? extends T>) new JdbcCursorItemReaderBuilder<SZBDData>()
+                .saveState(false)
+                .dataSource(dataSources[currentResource])
+                .sql(SQLHelper.SQL)
+                .rowMapper(new BeanPropertyRowMapper<SZBDData>(SZBDData.class))
+                .build();
+            }
             delegate.setDataSource(dataSources[currentResource]);
-            // delegate.open(new ExecutionContext());
+            delegate.open(new ExecutionContext());
         }
 
         return readNextItem();
@@ -75,6 +87,10 @@ public class MultiJdbcItemReader<T> implements ItemReader<T> {
     }
 
     public void setDelegate(JdbcCursorItemReader<? extends T> delegate) {
-		this.delegate = delegate;
-	}
+        this.delegate = delegate;
+    }
+
+    public void setDataSources(DataSource[] dataSources) {
+        this.dataSources = dataSources;
+    }
 }

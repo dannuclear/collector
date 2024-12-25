@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "configuration.db")
-public class Url {
-    private String urls;
+@ConfigurationProperties(prefix = "collector.db")
+public class CollectorProperties {
+    private List<String> urls;
 }
